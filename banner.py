@@ -4,18 +4,16 @@ from rich.text import Text
 from pyfiglet import figlet_format
 
 
-def show_banner():
-    console = Console()
-
+def get_banner() -> Panel:
     banner_text = figlet_format("SUBZER0", font="slant")
-
     styled_banner = Text(banner_text, style="bold cyan")
-
-    panel = Panel.fit(
+    return Panel.fit(
         styled_banner,
         border_style="bright_blue",
         title="[bold white]❄ SubZero Recon Framework ❄[/bold white]",
-        subtitle="[bold green]Built by SecurityGeek[/bold green]"
+        subtitle="[bold green]Built by SecurityGeek[/bold green]",
     )
 
-    console.print(panel)
+
+def show_banner():
+    Console().print(get_banner())

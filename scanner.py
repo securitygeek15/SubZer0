@@ -7,7 +7,7 @@ import threading
 stop_event = threading.Event()
 
 
-def process_subdomain(domain: str, word: str):
+def process_subdomain(domain: str, word: str, prefer_https: bool = True):
     if stop_event.is_set():
         return None
 
@@ -16,15 +16,16 @@ def process_subdomain(domain: str, word: str):
         return None
 
     subdomain = f"{word}.{domain}"
+    ip = resolve_domain(subdomain)
 
-    if resolve_domain(subdomain):
-        status = check_http(subdomain)
-        return (subdomain, status)
+    if ip:
+        status = check_http(subdomain, prefer_https=prefer_https)
+        return (subdomain, status, ip)
 
     return None
 
 
-def scan(domain: str, wordlist_path: str, threads: int = 30):
+def scan(domain: str, wordlist_path: str, threads: int = 30, prefer_https: bool = True):
     with ThreadPoolExecutor(max_workers=threads) as executor:
         futures = []
 
@@ -34,7 +35,7 @@ def scan(domain: str, wordlist_path: str, threads: int = 30):
                     break
 
                 futures.append(
-                    executor.submit(process_subdomain, domain, word)
+                    executor.submit(process_subdomain, domain, word, prefer_https)
                 )
 
         try:

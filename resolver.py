@@ -1,8 +1,16 @@
 import socket
+import uuid
 
-def resolve_domain(domain: str) -> bool:
+
+def resolve_domain(domain: str) -> str | None:
     try:
-        socket.gethostbyname(domain)
-        return True
+        return socket.gethostbyname(domain)
     except socket.gaierror:
-        return False
+        return None
+    except OSError:
+        return None
+
+
+def check_wildcard_dns(domain: str) -> str | None:
+    random_sub = f"{uuid.uuid4()}.{domain}"
+    return resolve_domain(random_sub)
