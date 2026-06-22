@@ -35,7 +35,7 @@ subzero/
 Clone the repository:
 
 ```
-git clone https://github.com/securitygeek15/subzero.git
+git clone https://github.com/securitygeek15/SubZer0.git
 cd subzero
 ```
 
